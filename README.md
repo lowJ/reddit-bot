@@ -16,6 +16,18 @@ Setup
 1. For basic's you can select everything in text permissions. Then go to the bottom left and put in your client id. Click the link to add the bot.
 1. To turn the bot on, make sure you are cd in your bot directory, run "node index.js".
 
-Other
 
+Other
 You can change the command prefixes (default is "rr"). Go in index.js change the "suf" variable.
+
+Basic commands
+get/set [subreddit] [tab] - Will get a reddit page and set it to the current page. "front" or "frontPage" Will go to front page. Tab is an optional parameter.
+
+list - Will list all posts on the current page, numbered.
+
+[number] - Choose the number of the post on the current page and returns a link of the post.
+
+Example
+"rr get front top"
+"rr list"
+"rr 10"
