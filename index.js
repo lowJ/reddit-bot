@@ -22,13 +22,35 @@ bot.on('message', (message)=>{
     var server = servers[guildId];
     
     if(arg[0] == suf){
-        if(arg[1] == "r"){
-            getRedditJSON(arg[2], guildId);
-            console.log("before timout");
-            setTimeout(function(){
-                message.channel.sendMessage(server.currentPage.data.children[getRndInteger(0, 
-                server.currentPage.data.children.length - 1)].data.url);
-            }, 1000);
+        if(arg[1] == "s" || arg[1] == "set"){
+            if(arg[2]){
+                if(arg[3] && (arg[2] == "front" || arg[2] == "frontPage")){
+                    var url = "https://reddit.com/" + arg[3] + ".json";
+                    getRedditJSON(url, guildId);
+                    setTimeout(function(){
+                        sendEmbed(4650299, "Setting", "Setting " + url);
+                    }, 1000);
+                }
+                else if(arg[2] =="front" || arg[2] == "frontPage"){
+                    getRedditJSON("https://reddit.com/hot.json");
+                    setTimeout(function(){
+                        sendEmbed(4650299, "Setting", "Setting https://reddit.com/hot");
+                    }, 1000);
+                }
+                else if(arg[2] && arg[3]){
+                    var url = "https://reddit.com/r/" + arg[2] + "/" + arg[3] + ".json";
+                    getRedditJSON(url, guildId);
+                    setTimeout(function(){
+                        sendEmbed(4650299, "Setting", "Setting " + url);
+                    }, 1000);
+                }
+                else if(arg[2]){
+                    var url = "https://reddit.com/r/" + arg[2] + ".json";
+                    setTimeout(function(){
+                        sendEmbed(4650299, "Setting", "Setting " + url);
+                    }, 1000);
+                }
+            }
         }
         
         else if(arg[1] == "list" || arg[1] == "l"){
@@ -72,14 +94,22 @@ bot.on('message', (message)=>{
 });
 //list titles of all posts on currentPage
 function createList(id){
+    var maxLength = 2048;
     var page = servers[id].currentPage.data;
     var list;
+    var added;
+    var maxLengthTitle = Math.floor(2048/page.children.length);
     var numbering = 0;
     var i = 0;
     for(i = 0; i < page.children.length; i++){
         console.log(page.children[i].data.title);
         numbering+= 1;
-        list += numbering + ".   " + page.children[i].data.title + "\n";
+        added = numbering + ". " + page.children[i].data.title + "\n";
+        if(added.length > maxLengthTitle){
+            added = numbering + ". " + page.children[i].data.title;
+            added = added.substring(0, maxLengthTitle - 5) + "...\n";
+        }
+        list += added;
     }
     return list;
 }
@@ -87,6 +117,7 @@ function createList(id){
 function getRedditJSON(url, id){
     var page;
     var request = require('request');
+    console.log("start request:" + url);
     request(url, function (error, response, body) {
         console.log("in request");
         if (!error && response.statusCode == 200) {
