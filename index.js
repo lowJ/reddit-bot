@@ -4,16 +4,22 @@ const bot = new Discord.Client();
 const suf = "rr";
 bot.login('MzM3Mzg4NjQyODk1MDAzNjQ4.DGb2Kg.vEcEhciroEodjFXASJvxDzWhSIg');
 
-bot.on('ready', () => {
-    console.log("Bot is ready");
-});
+
 
 var servers = {};
 
+bot.on('ready', () => {
+    console.log("Bot is ready");
+
+});
+
 bot.on('message', (message)=>{
-    if(!servers[message.guild.id]) servers[message.guild.id] = {
+    if(!servers[message.guild.id]){
+        servers[message.guild.id] = {
             currentPage:null,
-    };
+        };  
+        getRedditJSON("https://reddit.com/hot.json", message.guild.id);
+    }
     var guildId = message.guild.id;
     var msgCaseSense = message.content;
     var argCaseSense = msgCaseSense.split(" ");
@@ -22,7 +28,8 @@ bot.on('message', (message)=>{
     var server = servers[guildId];
     
     if(arg[0] == suf){
-        if(arg[1] == "s" || arg[1] == "set"){
+        if(arg[1] == "s" || arg[1] == "set"
+        || arg[1] == "g" || arg[1] == "get"){
             if(arg[2]){
                 if(arg[3] && (arg[2] == "front" || arg[2] == "frontPage")){
                     var url = "https://reddit.com/" + arg[3] + ".json";
@@ -50,6 +57,10 @@ bot.on('message', (message)=>{
                         sendEmbed(4650299, "Setting", "Setting " + url);
                     }, 1000);
                 }
+            }
+            else{
+                sendEmbed(12393521, ":exclamation:Error:exclamation:",
+                "Invalid parameters for get/set");
             }
         }
         
