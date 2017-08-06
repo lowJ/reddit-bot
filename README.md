@@ -4,7 +4,7 @@ A discord bot for getting reddit stuff
 Setup
 1. Download my file, create a new directory and put my file in it, this will be the directory of the bot.
 1. Install Node js. (https://nodejs.org/en/).
-1. In command line cd to the bot directory, then run "npm init" to initalize your directory with Node files.
+1. In command line cd to the bot directory.
 1. Run "npm install request --save", this will install the request module.
 1. Run "npm install --save discord.js", this will install the discord.js module.
 1. Now you need to create your own discord app. (https://discordapp.com/developers/applications/me).
