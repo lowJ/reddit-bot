@@ -88,6 +88,7 @@ bot.on('message', (message)=>{
                                 sendEmbed(4650299, "Attempting", "Attempting to get: " + url2);
                             }, 1000);
                         }
+                        //not properley working
                         else if(arg[1] == "prev" || arg[1] == "previous" && selectedPage.before != null){
                             count -= 25;
                             var url3 = curUrl + "?count=" + count + "&before=" + selectedPage.before;
