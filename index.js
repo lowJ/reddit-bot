@@ -237,12 +237,13 @@ function getRedditJSON(urll, id){
         if (!error && response.statusCode == 200) {
             page = JSON.parse(body);
             setTimeout(function(){
-                servers[id].currentPage = page;
-                servers[id].currentUrl = urll;
-                console.log("setting currentPage");
-                console.log('error:', error);
-                console.log("first post is: " + page.data.children[0]
-                .data.url);
+                if(!page.hasOwnProperty("kind")){
+                    console.log("undefined url");
+                }
+                else{
+                    servers[id].currentPage = page;
+                    servers[id].currentUrl = urll;
+                }
             }, 3000);
             
         }
