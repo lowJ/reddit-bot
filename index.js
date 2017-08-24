@@ -2,15 +2,39 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 //edit suf to change the suffix for commands
 const suf = "rr";
-bot.login('MzM3Mzg4NjQyODk1MDAzNjQ4.DGb2Kg.vEcEhciroEodjFXASJvxDzWhSIg');
+bot.login('MzQ5MzY1MDQxNTQ1NDc4MTQ0.DH0bEA.Xz22Om1WxjasVHjT8sUUyxOm2us');
+const gameStatus = "Type '" + suf + "' for help.";
 
-
+const helpMsg = 'Type the suffix before all these commands ' + suf + '. * = optional\n' +
+'\n' +
+'\"get\" - Gets and sets the current page \n' +
+'          - Usage:\"' + suf + ' get [subreddit] [tab*]\"\n' +
+'          - Alias: \"s\", \"g\", \"set\"\n' + 
+'          - Notes: Using \"frontPage\" or \"front\" will set it to front page reddit\n' +
+'          - Example: \"' + suf + " get overwatch top\"\n" +
+'\n' +
+'\"list\" - Lists all posts on current page \n' +
+'           - Usage:\"' + suf + ' list\"\n' +
+'           - Alias: \"l\"\n' + 
+'\n' +
+'\"[number]\" - Gets a post from the current page, its based on the numbering given by the "list" command \n' +
+'               - Usage:\"' + suf + ' [number]\"\n' +
+'\n' +
+'\"random\" - Gets random post from current page \n' +
+'           - Usage:\"' + suf + ' random\"\n' +
+'           - Alias: \"rand\", \"r\"\n' + 
+'\n' +
+'\"next\" - Gets and sets the next page based on the current page \n' +
+'           - Usage:\"' + suf + ' next\"\n' +
+'\n'
+;
 
 var servers = {};
 
 bot.on('ready', () => {
     console.log("Bot is ready");
-    bot.user.setGame("Type '" + suf + "' for help.");
+    //bot.user.setStatus(gameStatus);
+    bot.user.setStatus('adsfadsfsdfdsfdsafsfsdafds');
 });
 
 bot.on('message', (message)=>{
@@ -28,7 +52,10 @@ bot.on('message', (message)=>{
     var server = servers[guildId];
     //parse invaldid tabs
     if(arg[0] == suf){
-        if(arg[1] == "s" || arg[1] == "set"
+        if(arg.length == 1 || arg[1] == "help"){
+            sendEmbed(4216564, "Help", helpMsg);
+        }
+        else if(arg[1] == "s" || arg[1] == "set"
         || arg[1] == "g" || arg[1] == "get"){
             if(arg[2]){
                 if(arg[3] && (arg[2] == "frontpage" || arg[2] == "front")){
