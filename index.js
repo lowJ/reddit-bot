@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 //edit suf to change the suffix for commands
 const suf = "rr";
-bot.login('MzQ5MzY1MDQxNTQ1NDc4MTQ0.DH0bEA.Xz22Om1WxjasVHjT8sUUyxOm2us');
+bot.login('NDA4ODY4MTQ3MDE0NDAyMDQ4.DVWTsA.qgjxPjESnULnYK6xwJFVW4JT-HI');
 const gameStatus = "Type '" + suf + "' for help.";
 
 const helpMsg = 'Type the suffix before all these commands ' + suf + '. * = optional\n' +
@@ -30,14 +30,21 @@ const helpMsg = 'Type the suffix before all these commands ' + suf + '. * = opti
 ;
 
 var servers = {};
+var watching = {
+    "channels":[
+    ]
+};
 
 bot.on('ready', () => {
     console.log("Bot is ready");
     //bot.user.setStatus(gameStatus);
     bot.user.setStatus('adsfadsfsdfdsfdsafsfsdafds');
 });
+var currentMsg;//a way to store the current message so methods outside of bot.on can use it.
 
 bot.on('message', (message)=>{
+    currentMsg = message;
+    console.log(message.guild.id);
     if(!servers[message.guild.id]){
         servers[message.guild.id] = {
             currentPage:null,
@@ -51,6 +58,9 @@ bot.on('message', (message)=>{
     var arg = msg.split(" ");
     var server = servers[guildId];
     //parse invaldid tabs
+    if(arg[0] == suf + "a"){
+        message.delete();
+    }
     if(arg[0] == suf){
         if(arg.length == 1 || arg[1] == "help"){
             sendEmbed(4216564, "Help", helpMsg);
@@ -76,9 +86,10 @@ bot.on('message', (message)=>{
                 else if(arg[2] && arg[3]){
                     console.log("3");
                     var url = "https://reddit.com/r/" + arg[2] + "/" + arg[3] + ".json";
+                    sendEmbed(4650299, "Attempting", "Attempting to get: " + url);
                     getRedditJSON(url, guildId);
                     setTimeout(function(){
-                        sendEmbed(4650299, "Attempting", "Attempting to get: " + url);
+                        
                     }, 1000);
                 }
                 else if(arg[2]){
@@ -94,6 +105,21 @@ bot.on('message', (message)=>{
                 sendEmbed(12393521, ":exclamation:Error:exclamation:",
                 "Invalid parameters for get/set");
             }
+        }
+        
+        else if(arg[1] == "watch"){
+            watching[message.channel.guildId].channels[message.channel.id].push(arg[2]);
+            console.log(watching[message.channel.guildId].channels[message.channel.id]);
+            //message.channel.id gets channel id
+            //message
+        }
+        
+        else if(arg[1] == "tst"){
+            tester();
+        }
+        
+        else if(arg[1] == "tts"){
+            message.channel.sendMessage(msg.substring(7, msg.length), {tts: true});
         }
         
         else if(arg[1] == "next" || arg[1] == "prev" || arg[1] == "previous"){
@@ -219,6 +245,7 @@ bot.on('message', (message)=>{
         }
     }
     
+    
     function sendEmbed(col, titl, desc){
         message.channel.send({embed:{
             color: col,
@@ -264,8 +291,9 @@ function getRedditJSON(urll, id){
         if (!error && response.statusCode == 200) {
             page = JSON.parse(body);
             setTimeout(function(){
-                if(!page.hasOwnProperty("kind")){
-                    console.log("undefined url");
+                if(page.message = "Not Found"){
+                    //if the url has nothing
+                    sendEmbed(12393521, "Error", "Invalid url", currentMsg);
                 }
                 else{
                     servers[id].currentPage = page;
@@ -275,11 +303,28 @@ function getRedditJSON(urll, id){
             
         }
         else{
+            //if unsuccsessful
+            sendEmbed(12393521, "Error", "Invalid url", currentMsg);
             console.log("Error:" + error);
         }
     }) 
 }
 
+function sendEmbed(col, titl, desc, msgObj){
+        msgObj.channel.send({embed:{
+            color: col,
+            author:{
+                name: bot.user.username,
+                icon_url: bot.user.avatarURL,
+            },
+            title: titl,
+            description: desc,
+        }});
+    }
+
+function tester(){
+    currentMsg.channel.sendMessage("sup");
+}
 
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
