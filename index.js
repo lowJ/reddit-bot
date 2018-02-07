@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 //edit suf to change the suffix for commands
 const suf = "rr";
-bot.login('NDA4ODY4MTQ3MDE0NDAyMDQ4.DVWTsA.qgjxPjESnULnYK6xwJFVW4JT-HI');
+bot.login('');
 const gameStatus = "Type '" + suf + "' for help.";
 
 const helpMsg = 'Type the suffix before all these commands ' + suf + '. * = optional\n' +
@@ -291,9 +291,10 @@ function getRedditJSON(urll, id){
         if (!error && response.statusCode == 200) {
             page = JSON.parse(body);
             setTimeout(function(){
-                if(page.message = "Not Found"){
+                if(body.length <= 135){ //fix when searching ex 
+                    console.log(page.message);
                     //if the url has nothing
-                    sendEmbed(12393521, "Error", "Invalid url", currentMsg);
+                    sendEmbed(12393521, "Error", "Invalid urll", currentMsg);
                 }
                 else{
                     servers[id].currentPage = page;
