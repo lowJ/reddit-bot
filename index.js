@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 //edit suf to change the suffix for commands
 const suf = "rr";
-bot.login('');
+bot.login('NDA4ODY4MTQ3MDE0NDAyMDQ4.DVYgFQ.bIRw2oAgxtn7IaZsmJf6Q7q-lzg');
 const gameStatus = "Type '" + suf + "' for help.";
 
 const helpMsg = 'Type the suffix before all these commands ' + suf + '. * = optional\n' +
@@ -133,22 +133,32 @@ bot.on('message', (message)=>{
                         var numEnd = curUrl.indexOf("&", numStart);
                         var count = Number(curUrl.substring(numStart, numEnd));
                         curUrl = curUrl.substring(0, curUrl.indexOf("?count="));
-                        if(arg[1] == "next" && selectedPage.after != null){
-                            count += 25;
-                            var url2 = curUrl + "?count=" + count + "&after=" + selectedPage.after;
-                            getRedditJSON(url2, guildId);
-                            setTimeout(function(){
-                                sendEmbed(4650299, "Attempting", "Attempting to get: " + url2);
-                            }, 1000);
+                        if(arg[1] == "next"){
+                            if(selectedPage.after == null){
+                                sendEmbed(12393521, "Error", "There is no next page");
+                            }
+                            else{
+                                count += 25;
+                                var url2 = curUrl + "?count=" + count + "&after=" + selectedPage.after;
+                                getRedditJSON(url2, guildId);
+                                setTimeout(function(){
+                                    sendEmbed(4650299, "Attempting", "Attempting to get: " + url2);
+                                }, 1000);
+                            }
                         }
                         //not properley working
-                        else if(arg[1] == "prev" || arg[1] == "previous" && selectedPage.before != null){
-                            count -= 25;
-                            var url3 = curUrl + "?count=" + count + "&before=" + selectedPage.before;
-                            getRedditJSON(url3, guildId);
-                            setTimeout(function(){
-                                sendEmbed(4650299, "Attempting", "Attempting to get: " + url3);
-                            }, 1000);
+                        else if(arg[1] == "prev" || arg[1] == "previous"){
+                            if(selectedPage.before == null){
+                                sendEmbed(12393521, "Error", "There is no previous page");
+                            }
+                            else{
+                                count -= 24;
+                                var url3 = curUrl + "?count=" + count + "&before=" + selectedPage.before;
+                                getRedditJSON(url3, guildId);
+                                setTimeout(function(){
+                                    sendEmbed(4650299, "Attempting", "Attempting to get: " + url3);
+                                }, 1000);
+                            }
                             
                             //fix this
                             // if(count == 0){
@@ -166,11 +176,18 @@ bot.on('message', (message)=>{
                             }, 1000);
                         }
                         else if(arg[1] == "prev" || arg[1] == "previous"){
-                            var url3 = curUrl + "?count=25&before=" + selectedPage.before;
-                            getRedditJSON(url3, guildId);
-                            setTimeout(function(){
-                                sendEmbed(4650299, "Attempting", "Attempting to get: " + url3);
-                            }, 1000);
+                            if(selectedPage.before == null){
+                                sendEmbed(12393521, "Error", "There is no previous page");
+                                
+                            }
+                            else{
+                                var url3 = curUrl + "?count=25&before=" + selectedPage.before;
+                                getRedditJSON(url3, guildId);
+                                setTimeout(function(){
+                                    sendEmbed(4650299, "Attempting", "Attempting to get: " + url3);
+                                }, 1000);
+                            }
+                            
                         }
                     }
                 }
@@ -180,7 +197,7 @@ bot.on('message', (message)=>{
                 
             }
             else{
-                sendEmbed(16774459, " ", "There is no current page");
+                sendEmbed(16774459, " ", "There is no current pagee");
             }
         }
         
