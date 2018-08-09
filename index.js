@@ -9,20 +9,20 @@ const helpMsg = 'Type the suffix before all these commands ' + suf + '. * = opti
 '\n' +
 '\"get\" - Gets and sets the current page \n' +
 '          - Usage:\"' + suf + ' get [subreddit] [tab*]\"\n' +
-'          - Alias: \"s\", \"g\", \"set\"\n' + 
+'          - Alias: \"s\", \"g\", \"set\"\n' +
 '          - Notes: Using \"frontPage\" or \"front\" will set it to front page reddit\n' +
 '          - Example: \"' + suf + " get overwatch top\"\n" +
 '\n' +
 '\"list\" - Lists all posts on current page \n' +
 '           - Usage:\"' + suf + ' list\"\n' +
-'           - Alias: \"l\"\n' + 
+'           - Alias: \"l\"\n' +
 '\n' +
 '\"[number]\" - Gets a post from the current page, its based on the numbering given by the "list" command \n' +
 '               - Usage:\"' + suf + ' [number]\"\n' +
 '\n' +
 '\"random\" - Gets random post from current page \n' +
 '           - Usage:\"' + suf + ' random\"\n' +
-'           - Alias: \"rand\", \"r\"\n' + 
+'           - Alias: \"rand\", \"r\"\n' +
 '\n' +
 '\"next\" - Gets and sets the next page based on the current page \n' +
 '           - Usage:\"' + suf + ' next\"\n' +
@@ -48,7 +48,7 @@ bot.on('message', (message)=>{
     if(!servers[message.guild.id]){
         servers[message.guild.id] = {
             currentPage:null,
-        };  
+        };
         //getRedditJSON("https://reddit.com/hot.json", message.guild.id);
     }
     var guildId = message.guild.id;
@@ -89,7 +89,7 @@ bot.on('message', (message)=>{
                     sendEmbed(4650299, "Attempting", "Attempting to get: " + url);
                     getRedditJSON(url, guildId);
                     setTimeout(function(){
-                        
+
                     }, 1000);
                 }
                 else if(arg[2]){
@@ -106,7 +106,7 @@ bot.on('message', (message)=>{
                 "Invalid parameters for get/set");
             }
         }
-        
+
         else if(arg[1] == "watch"){
             watching[message.channel.guildId].channels[message.channel.id].push(arg[2]);
             console.log(watching[message.channel.guildId].channels[message.channel.id]);
@@ -114,14 +114,10 @@ bot.on('message', (message)=>{
             //message
         }
         
-        else if(arg[1] == "tst"){
-            tester();
-        }
-        
         else if(arg[1] == "tts"){
             message.channel.sendMessage(msg.substring(7, msg.length), {tts: true});
         }
-        
+
         else if(arg[1] == "next" || arg[1] == "prev" || arg[1] == "previous"){
             if(server.currentPage != null){
                 if(server.currentPage.hasOwnProperty("data")){
@@ -159,13 +155,8 @@ bot.on('message', (message)=>{
                                     sendEmbed(4650299, "Attempting", "Attempting to get: " + url3);
                                 }, 1000);
                             }
-                            
-                            //fix this
-                            // if(count == 0){
-                            //     count = 26;
-                            // }
                         }
-                        
+
                     }
                     else{
                         if(arg[1] == "next"){
@@ -178,7 +169,7 @@ bot.on('message', (message)=>{
                         else if(arg[1] == "prev" || arg[1] == "previous"){
                             if(selectedPage.before == null){
                                 sendEmbed(12393521, "Error", "There is no previous page");
-                                
+
                             }
                             else{
                                 var url3 = curUrl + "?count=25&before=" + selectedPage.before;
@@ -187,64 +178,50 @@ bot.on('message', (message)=>{
                                     sendEmbed(4650299, "Attempting", "Attempting to get: " + url3);
                                 }, 1000);
                             }
-                            
+
                         }
                     }
                 }
                 else{
                     sendEmbed(16774459, " ", "Invalid current page page");
                 }
-                
+
             }
             else{
                 sendEmbed(16774459, " ", "There is no current pagee");
             }
         }
-        
+
         else if(arg[1] == "random" || arg[1] == "rand" || arg[1] == "r"){
             if(server.currentPage != null){
                 if(server.currentPage.hasOwnProperty("data")){
                     var selectedPage = server.currentPage.data;
                     if(selectedPage.children){
-                        message.channel.sendMessage(selectedPage.children[getRndInteger(0, 
+                        message.channel.sendMessage(selectedPage.children[getRndInteger(0,
                         selectedPage.children.length -1)].data.url);
                     }
                 }
             }
             else{
                 sendEmbed(16774459, " ", "There is no current page");
-                // getRedditJSON("https://reddit.com/hot.json", guildId);
-                // setTimeout(function(){
-                //     if(true){
-                //         var selectedPage = server.currentPage.data;
-                //         if(server.currentPage.data.children){
-                //             message.channel.sendMessage(selectedPage.children[getRndInteger(0, 
-                //             selectedPage.children.length -1)].data.url);
-                //         }
-                //     }
-                //     else{
-                //         sendEmbed(12393521, ":exclamation:Error:exclamation:", "An error occureed");
-                //     }
-                // }, 2000);
             }
         }
-        
+
         else if(arg[1] == "list" || arg[1] == "l"){
             if(server.currentPage){
                 sendEmbed(4216564,"",createList(guildId));
-                //message.channel.sendMessage(createList(guildId));
             }
             else{
                 sendEmbed(12393521, ":exclamation:Error:exclamation:",
                 "There is no page, get one with \"" + suf + " g" + "[subreddit]\"");
             }
         }
-        
-        
+
+
         else if(!isNaN(arg[1])){
             if(server.currentPage){
                 var selectedPage = server.currentPage.data;
-                var i = Math.round(parseFloat(arg[1])) - 1; 
+                var i = Math.round(parseFloat(arg[1])) - 1;
                 if(selectedPage.children.length - 1 >= i){
                     message.channel.sendMessage(selectedPage.children[i].data.url);
                 }
@@ -261,8 +238,8 @@ bot.on('message', (message)=>{
             sendEmbed(12393521, ":exclamation:Error:exclamation:", "Invalid command");
         }
     }
-    
-    
+
+
     function sendEmbed(col, titl, desc){
         message.channel.send({embed:{
             color: col,
@@ -304,11 +281,11 @@ function getRedditJSON(urll, id){
     request(urll, function (error, response, body) {
         console.log("finished request");
         //add way to catch errors
-        
+
         if (!error && response.statusCode == 200) {
             page = JSON.parse(body);
             setTimeout(function(){
-                if(body.length <= 135){ //fix when searching ex 
+                if(body.length <= 135){ //fix when searching ex
                     console.log(page.message);
                     //if the url has nothing
                     sendEmbed(12393521, "Error", "Invalid urll", currentMsg);
@@ -318,14 +295,14 @@ function getRedditJSON(urll, id){
                     servers[id].currentUrl = urll;
                 }
             }, 3000);
-            
+
         }
         else{
             //if unsuccsessful
             sendEmbed(12393521, "Error", "Invalid url", currentMsg);
             console.log("Error:" + error);
         }
-    }) 
+    })
 }
 
 function sendEmbed(col, titl, desc, msgObj){
@@ -340,11 +317,6 @@ function sendEmbed(col, titl, desc, msgObj){
         }});
     }
 
-function tester(){
-    currentMsg.channel.sendMessage("sup");
-}
-
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
- 
